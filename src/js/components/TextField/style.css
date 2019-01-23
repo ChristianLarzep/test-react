@@ -1,0 +1,29 @@
+.disabled{
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.input-text{
+  margin-top:5px;;
+  height: 40px;
+  width: 90%;
+  border:solid #A5A2A6;
+  border-width: 0.5px;
+  padding-left: 35px;
+  font-size: 16px;
+  transition: border .5s ease-in-out;
+}
+
+.input-text:focus{
+  border: .5px solid black;
+
+}
+
+.label-text{
+  color:#8F8893;
+  float: left;
+}
+
+.textfield{
+  margin-top: 18px;
+}

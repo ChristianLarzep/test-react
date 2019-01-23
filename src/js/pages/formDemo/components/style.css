@@ -1,0 +1,22 @@
+.page{
+
+}
+
+.page-header {
+  top: 0;
+  padding: 40px 0;
+  width: 40%;
+  font-size: 28px;
+}
+
+.page-body{
+    background-color: #F4F4F4;
+    position: absolute;
+    top: 10%;
+    bottom: 0;
+    width: 100%;
+}
+
+.body-container{
+  margin-top: 150px;
+}

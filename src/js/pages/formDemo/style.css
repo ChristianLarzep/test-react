@@ -1,0 +1,28 @@
+
+.login-page {
+  margin: 0;
+  color: black;
+  height: 100%;
+}
+
+.page-body{
+  width: 100%;
+}
+
+.body-container{
+   text-align: center;
+}
+
+.form{
+  padding: 10px;
+}
+
+.title{
+  font-family: 'Work Sans';
+}
+
+.row{
+  margin:auto;
+  border-radius: 2px;
+  width: 18%;
+}
