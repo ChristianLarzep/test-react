@@ -28,15 +28,13 @@ function TextField(props) {
       {label && <label className="label-text">{label}</label>}
 
       <div className='input'>
-        {input && <Field {...others} {...input} component="input" className="" type={type} />}
+        {input && <Field {...input} component="input" className="" type={type} />}
         {!input && (
           <Field
-            {...others}
             className="input-text"
             name={name}
             type={type}
             component="input"
-            value={value}
           />
         )}
       </div>

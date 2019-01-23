@@ -10,6 +10,8 @@ import Title from '../../components/Title/Title';
 import TextField from '../../components/TextField/TextField';
 import Button from '../../components/Button/Button';
 
+import { connect } from 'react-redux';
+
 import './style.css';
 
 class FormDemo extends Component{
@@ -50,27 +52,22 @@ class FormDemo extends Component{
            <Form  onSubmit={handleSubmit}>
               <div className="row">
                <TextField
-                  id="email"
-                  name="email"
-                  type="email"
-                  errorText="Ingresa un formato de correo correcto."
+                  id="name"
+                  name="name"
+                  type="text"
+                  label="Name"
+                  value="kk"
+                  errorText="Ingresa tu nombre."
                 />
                 <TextField
-                   id="password"
-                   name="password"
-                   type="password"
-                   label="Contraseña"
-                   errorText="Contraseña incorrecta."
+                   id="apellido"
+                   name="apellido"
+                   type="text"
+                   label="Lastname"
+                   errorText="Ingresa tu apellido."
                  />
-
-                 <Field name="favoriteColor" component="select">
-                    <option></option>
-                    <option value="ff0000">Red</option>
-                    <option value="00ff00">Green</option>
-                    <option value="0000ff">Blue</option>
-                  </Field>
                  <Button id="button-login" color="success" type="submit" disabled={false} spinner={false}>
-                  Iniciar Sesión
+                    Enviar
                 </Button>
                 </div>
            </Form>
@@ -83,5 +80,13 @@ FormDemo = reduxForm({
   form: 'simple' // a unique identifier for this form
 })(FormDemo)
 
-export default FormDemo;
+
+export default connect(state => ({
+  // alternatively, you can set initial values here...
+  initialValues: {
+    name: 'some value here',
+    apellido: 'some'
+  }
+}))(FormDemo);
+
 //https://redux-form.com/8.1.0/examples/simple/
