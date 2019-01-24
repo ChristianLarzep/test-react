@@ -54,10 +54,11 @@ class FormDemo extends Component{
       this.state.recognition.interimResults = true;
 
       this.state.recognition.onstart = function() { //onstart event handler. For each new set of results, it calls the onresult event handler.
-        this.state.recognizing = true;
+
+        this.setState({recognizing: true})
         //showInfo('info_speak_now');
         //start_img.src = 'mic-animate.gif';
-      };
+      }.bind(this);
 
       this.state.recognition.onerror = function(event) { //onerror event handler
         /*if (event.error == 'no-speech') {
@@ -106,22 +107,25 @@ class FormDemo extends Component{
 
       this.state.recognition.onresult = function(event) {  // onresult event handler
         var interim_transcript = '';
+        var final_trans = '';
         for (var i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
-            this.state.final_transcript += event.results[i][0].transcript;
+             final_trans += event.results[i][0].transcript;
+
           } else {
             interim_transcript += event.results[i][0].transcript;
           }
         }
-        this.state.final_transcript = this.capitalize(this.state.final_transcript);
+        this.state.final_transcript = this.capitalize(final_trans);
         //final_span.innerHTML = linebreak(final_transcript); // to convert these to HTML tags <br> or <p> and sets these strings as the innerHTML of their corresponding <span> elements
-          console.log(this.linebreak(this.state.final_transcript));
+          //console.log(this.linebreak(this.state.final_transcript));
         //interim_span.innerHTML = linebreak(interim_transcript);// to convert these to HTML tags <br> or <p> and sets these strings as the innerHTML of their corresponding <span> elements
-          console.log(this.linebreak(interim_transcript));
+          console.log("Result: ",this.linebreak(interim_transcript));
+          this.props.initialize({ name: this.state.final_transcript });
         //if (final_transcript || interim_transcript) {
         //  showButtons('inline-block');
         //}
-      };
+      }.bind(this);
     }
        //this.props.initialize({ lastname: 'some value here' });
 
@@ -138,20 +142,20 @@ class FormDemo extends Component{
      return s.replace(first_char, function(m) { return m.toUpperCase(); });
    }
 
-  mySubmit = async data => {
-    console.log("DATA: ",data);
+  mySubmit = data => {
     this.startToTalk();
   };
 
-  startToTalk() {
-    const { recognition, final_transcript, recognizing } = this.state;
-    if (recognizing) {
-      recognition.stop();
+  startToTalk = () =>  {
+    console.log("IN");
+    const { recognizing } = this.state;
+    if (this.state.recognizing) {
+      this.state.recognition.stop();
       return;
     }
-    final_transcript = '';
-    recognition.lang = 'United States';
-    recognition.start(); // call to onstart event handler
+    this.state.final_transcript = '';
+    this.state.recognition.lang = 'United States';
+    this.state.recognition.start(); // call to onstart event handler
     this.state.ignore_onend = false;
     //final_span.innerHTML = '';
     //interim_span.innerHTML = '';
@@ -169,7 +173,7 @@ class FormDemo extends Component{
                <title>Bienvenido</title>
            </Helmet>
            <Title color="purple" tag="h3" >Formulario</Title>
-           <Form  name="myForm" onSubmit={handleSubmit}>
+           <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
               <div className="row">
                <TextField
                   id="name"
