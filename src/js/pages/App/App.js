@@ -18,9 +18,6 @@ const reducer = combineReducers(reducers)
 const store = createStore(reducer)
 
 class App extends Component {
- constructor(props){
-   super(props);
- }
 
   submit = (values) => {
     // Do something with the form values

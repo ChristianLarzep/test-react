@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import './style.css';
-
-function Page(props){
-  const {id, className, children } = props;
+class Page extends Component{
+  render(){
+  const { children } = this.props;
   return (
-      <section className="page">
-          <Header className="page-header"/>
+      <section className="page" >
+          <Header className="page-header" sendAccent={(e) => this.props.onSendAccent(e)} onStart = {this.props.onStart}/>
           <div className="page-body">
              <div className="body-container">
                <div className="form">
@@ -17,6 +17,7 @@ function Page(props){
           </div>
       </section>
   );
+ }
 }
 
 

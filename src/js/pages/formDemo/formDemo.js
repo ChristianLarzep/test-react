@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {  reduxForm, Form, Field } from 'redux-form';
+import {  reduxForm, Form, change} from 'redux-form';
 
 import Page from './components/Page';
 
@@ -33,13 +33,13 @@ class FormDemo extends Component{
       recognizing: false,
       ignore_onend: null,
       start_timestamp: null,
-      recognition:null
+      recognition:null,
+      numQuest: 2,
+      counterQuest: 0,
+      questions: ["What is your name?", "What is your lastname?"],
+      fields: ["name", "lastname"],
+      langs: 'Australia'
     }
-
-  constructor(props){
-    super(props);
-
-  }
 
   componentDidMount() {
 
@@ -48,66 +48,45 @@ class FormDemo extends Component{
     } else {
       //start_button.style.display = 'inline-block';
       var speechRecognition = window.webkitSpeechRecognition;
+      var speechSyn = window.speechSynthesis;
+      const { questions } = this.state;
 
       this.state.recognition = new speechRecognition();
       this.state.recognition.continuous = false; //The default value for continuous is false, meaning that when the user stops talking, speech recognition will end
       this.state.recognition.interimResults = true;
 
       this.state.recognition.onstart = function() { //onstart event handler. For each new set of results, it calls the onresult event handler.
-
-        this.setState({recognizing: true})
+        var u = new SpeechSynthesisUtterance();
+        u.text = questions[this.state.counterQuest];
+        u.lang = 'en-US';
+        u.rate = 1.2;
+        speechSyn.speak(u);
+        this.setState({
+          counterQuest: this.state.counterQuest + 1,
+        })
         //showInfo('info_speak_now');
         //start_img.src = 'mic-animate.gif';
       }.bind(this);
 
       this.state.recognition.onerror = function(event) { //onerror event handler
-        /*if (event.error == 'no-speech') {
-          start_img.src = 'mic.gif';
-          showInfo('info_no_speech');
-          ignore_onend = true;
-        }
-        if (event.error == 'audio-capture') {
-          start_img.src = 'mic.gif';
-          showInfo('info_no_microphone');
-          ignore_onend = true;
-        }
-        if (event.error == 'not-allowed') {
-          if (event.timeStamp - start_timestamp < 100) {
-            showInfo('info_blocked');
-          } else {
-            showInfo('info_denied');
-          }
-          ignore_onend = true;
-        }*/
       };
 
       this.state.recognition.onend = function() { // onend event handler
-        /*console.log("Done");
-        recognizing = false;
-        if (ignore_onend) {
-          return;
+        const { counterQuest, numQuest} = this.state;
+        if(counterQuest < numQuest){
+             setTimeout(function(){ this.startToTalk(); }.bind(this), 2000);
+              this.setState({
+                final_transcript:'',
+                recognizing: false,
+              })
+
         }
-        start_img.src = 'mic.gif';
-        if (!final_transcript) {
-          showInfo('info_start');
-          return;
-        }
-        showInfo('');
-        if (window.getSelection) {
-          window.getSelection().removeAllRanges();
-          var range = document.createRange();
-          range.selectNode(document.getElementById('final_span'));
-          window.getSelection().addRange(range);
-        }
-        if (create_email) {
-          create_email = false;
-          createEmail();
-        }*/
-      };
+      }.bind(this);
 
       this.state.recognition.onresult = function(event) {  // onresult event handler
         var interim_transcript = '';
         var final_trans = '';
+        const { fields } = this.state;
         for (var i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
              final_trans += event.results[i][0].transcript;
@@ -120,59 +99,59 @@ class FormDemo extends Component{
         //final_span.innerHTML = linebreak(final_transcript); // to convert these to HTML tags <br> or <p> and sets these strings as the innerHTML of their corresponding <span> elements
           //console.log(this.linebreak(this.state.final_transcript));
         //interim_span.innerHTML = linebreak(interim_transcript);// to convert these to HTML tags <br> or <p> and sets these strings as the innerHTML of their corresponding <span> elements
-          console.log("Result: ",this.linebreak(interim_transcript));
-          this.props.initialize({ name: this.state.final_transcript });
+        //this.props.initialize({  : this.state.final_transcript });
+        
+        this.props.dispatch(change('myForm', fields[this.state.counterQuest - 1] ,this.state.final_transcript ));
         //if (final_transcript || interim_transcript) {
         //  showButtons('inline-block');
         //}
       }.bind(this);
     }
-       //this.props.initialize({ lastname: 'some value here' });
-
    }
 
-   linebreak(s) {
+
+   linebreak = s => {
      var two_line = /\n\n/g;
      var one_line = /\n/g;
      return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
    }
 
-   capitalize(s) {
+   capitalize = s => {
      var first_char = /\S/;
      return s.replace(first_char, function(m) { return m.toUpperCase(); });
    }
 
   mySubmit = data => {
-    this.startToTalk();
+    console.log(data);
   };
 
   startToTalk = () =>  {
-    console.log("IN");
     const { recognizing } = this.state;
     if (this.state.recognizing) {
       this.state.recognition.stop();
       return;
     }
     this.state.final_transcript = '';
-    this.state.recognition.lang = 'United States';
+    this.state.recognition.lang = this.state.langs;
     this.state.recognition.start(); // call to onstart event handler
     this.state.ignore_onend = false;
-    //final_span.innerHTML = '';
-    //interim_span.innerHTML = '';
-    //start_img.src = 'mic-slash.gif';
-    //showInfo('info_allow');
-    //showButtons('none');
-    //start_timestamp = event.timeStamp;
   }
 
+  handleChange = (e) => {
+    console.log(e.target.value);
+    this.setState({langs:e.target.value});
+  }
+
+ //https://w3c.github.io/speech-api/speechapi.html#speechsynthesisvoicelist
   render(){
     const { handleSubmit, pristine, reset, submitting, loading  } = this.props;
     return(
-       <Page id="login-page" className="login-page">
+       <Page id="login-page" className="login-page" onSendAccent= { (e) => this.handleChange(e)} onStart= {this.startToTalk} >
            <Helmet>
                <title>Bienvenido</title>
            </Helmet>
-           <Title color="purple" tag="h3" >Formulario</Title>
+
+           <Title color="purple" tag="h3" >Voice Form</Title>
            <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
               <div className="row">
                <TextField
@@ -190,7 +169,7 @@ class FormDemo extends Component{
                    errorText="Ingresa tu apellido."
                  />
                  <Button id="button-login" color="success" type="submit" disabled={false} spinner={false}>
-                    Enviar
+                    Send
                 </Button>
                 </div>
            </Form>
@@ -200,10 +179,5 @@ class FormDemo extends Component{
 }
 
 export default FormDemo = reduxForm({
-  form: 'simple' // a unique identifier for this form
+  form: 'myForm' // a unique identifier for this form
 })(FormDemo)
-
-
-
-
-//https://redux-form.com/8.1.0/examples/simple/

@@ -6,16 +6,16 @@ import './style.css';
 
 function TextField(props) {
   const {
-    id,
-    className,
+    //id,
+    //className,
     disabled,
-    errorText,
+    //errorText,
     label,
     name,
     type,
     input,
-    value,
-    ...others
+    //value,
+    //...others
   } = props;
 
   const stylenames = classnames({
