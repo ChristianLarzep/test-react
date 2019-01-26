@@ -34,19 +34,18 @@ class FormDemo extends Component{
       ignore_onend: null,
       start_timestamp: null,
       recognition:null,
-      numQuest: 2,
+      numQuest: 0,
       counterQuest: 0,
-      questions: ["What is your name?", "What is your lastname?"],
-      fields: ["name", "lastname"],
+      questions: [],
+      fields: [],
       langs: 'Australia'
     }
 
   componentDidMount() {
-
+    this.getInputs();
     if (!('webkitSpeechRecognition' in window)) {
       //upgrade();
     } else {
-      //start_button.style.display = 'inline-block';
       var speechRecognition = window.webkitSpeechRecognition;
       var speechSyn = window.speechSynthesis;
       const { questions } = this.state;
@@ -54,6 +53,9 @@ class FormDemo extends Component{
       this.state.recognition = new speechRecognition();
       this.state.recognition.continuous = false; //The default value for continuous is false, meaning that when the user stops talking, speech recognition will end
       this.state.recognition.interimResults = true;
+      this.setState({
+        numQuest: this.state.questions.length
+      })
 
       this.state.recognition.onstart = function() { //onstart event handler. For each new set of results, it calls the onresult event handler.
         var u = new SpeechSynthesisUtterance();
@@ -63,9 +65,7 @@ class FormDemo extends Component{
         speechSyn.speak(u);
         this.setState({
           counterQuest: this.state.counterQuest + 1,
-        })
-        //showInfo('info_speak_now');
-        //start_img.src = 'mic-animate.gif';
+        });
       }.bind(this);
 
       this.state.recognition.onerror = function(event) { //onerror event handler
@@ -78,8 +78,7 @@ class FormDemo extends Component{
               this.setState({
                 final_transcript:'',
                 recognizing: false,
-              })
-
+            })
         }
       }.bind(this);
 
@@ -96,19 +95,20 @@ class FormDemo extends Component{
           }
         }
         this.state.final_transcript = this.capitalize(final_trans);
-        //final_span.innerHTML = linebreak(final_transcript); // to convert these to HTML tags <br> or <p> and sets these strings as the innerHTML of their corresponding <span> elements
-          //console.log(this.linebreak(this.state.final_transcript));
-        //interim_span.innerHTML = linebreak(interim_transcript);// to convert these to HTML tags <br> or <p> and sets these strings as the innerHTML of their corresponding <span> elements
-        //this.props.initialize({  : this.state.final_transcript });
-        
         this.props.dispatch(change('myForm', fields[this.state.counterQuest - 1] ,this.state.final_transcript ));
-        //if (final_transcript || interim_transcript) {
-        //  showButtons('inline-block');
-        //}
       }.bind(this);
     }
    }
 
+   getInputs = () => {
+      var elements = document.getElementsByClassName("input");
+
+      var names = '';
+      for(var i=0; i<elements.length; i++) {
+          this.state.questions[i] = elements[i].childNodes[0].alt;
+          this.state.fields[i] = elements[i].childNodes[0].name;
+      }
+   }
 
    linebreak = s => {
      var two_line = /\n\n/g;
@@ -138,11 +138,9 @@ class FormDemo extends Component{
   }
 
   handleChange = (e) => {
-    console.log(e.target.value);
     this.setState({langs:e.target.value});
   }
 
- //https://w3c.github.io/speech-api/speechapi.html#speechsynthesisvoicelist
   render(){
     const { handleSubmit, pristine, reset, submitting, loading  } = this.props;
     return(
@@ -160,6 +158,8 @@ class FormDemo extends Component{
                   type="text"
                   label="Name"
                   errorText="Ingresa tu nombre."
+                  question="What is your name?"
+                  className="input"
                 />
                 <TextField
                    id="lastname"
@@ -167,7 +167,18 @@ class FormDemo extends Component{
                    type="text"
                    label="Lastname"
                    errorText="Ingresa tu apellido."
+                   question="What is your lastname?"
+                   className="input"
                  />
+                 <TextField
+                    id="age"
+                    name="age"
+                    type="text"
+                    label="Age"
+                    errorText="Ingresa tu edad."
+                    question="How old are you?"
+                    className="input"
+                  />
                  <Button id="button-login" color="success" type="submit" disabled={false} spinner={false}>
                     Send
                 </Button>

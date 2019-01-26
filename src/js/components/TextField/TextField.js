@@ -6,7 +6,7 @@ import './style.css';
 
 function TextField(props) {
   const {
-    //id,
+    id,
     //className,
     disabled,
     //errorText,
@@ -14,6 +14,7 @@ function TextField(props) {
     name,
     type,
     input,
+    question,
     //value,
     //...others
   } = props;
@@ -28,13 +29,15 @@ function TextField(props) {
       {label && <label className="label-text">{label}</label>}
 
       <div className='input'>
-        {input && <Field {...input} component="input" className="" type={type} />}
+        {input && <Field  id={id} {...input} component="input" className="" type={type} alt={question} />}
         {!input && (
           <Field
+            id={id}
             className="input-text"
             name={name}
             type={type}
             component="input"
+            alt={question}
           />
         )}
       </div>
