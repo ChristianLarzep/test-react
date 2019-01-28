@@ -15,25 +15,15 @@ import './style.css';
 class FormDemo extends Component{
 
   static propTypes = {
-      errors: PropTypes.shape({
-        message: PropTypes.string,
-      }),
       handleSubmit: PropTypes.func,
-      loading: PropTypes.bool,
-      login: PropTypes.func,
-      resendToken: PropTypes.func,
-      resetState: PropTypes.func,
-      role: PropTypes.string,
-      success: PropTypes.bool,
+      loading: PropTypes.bool
     };
 
     state = {
       create_email:false,
       final_transcript:'',
       recognizing: false,
-      ignore_onend: null,
-      start_timestamp: null,
-      recognition:null,
+      recognition:{},
       numQuest: 0,
       counterQuest: 0,
       questions: [],
@@ -57,7 +47,7 @@ class FormDemo extends Component{
         numQuest: this.state.questions.length
       })
 
-      this.state.recognition.onstart = function() { //onstart event handler. For each new set of results, it calls the onresult event handler.
+      this.state.recognition.onstart = () => { //onstart event handler. For each new set of results, it calls the onresult event handler.
         var u = new SpeechSynthesisUtterance();
         u.text = questions[this.state.counterQuest];
         u.lang = 'en-US';
@@ -66,7 +56,7 @@ class FormDemo extends Component{
         this.setState({
           counterQuest: this.state.counterQuest + 1,
         });
-      }.bind(this);
+      };
 
       this.state.recognition.onerror = function(event) { //onerror event handler
       };
@@ -89,37 +79,35 @@ class FormDemo extends Component{
         for (var i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
              final_trans += event.results[i][0].transcript;
-
           } else {
             interim_transcript += event.results[i][0].transcript;
           }
         }
-        this.state.final_transcript = this.capitalize(final_trans);
+
+        this.setState({ final_transcript: this.capitalize(final_trans) })
         this.props.dispatch(change('myForm', fields[this.state.counterQuest - 1] ,this.state.final_transcript ));
       }.bind(this);
     }
    }
 
-   getInputs = () => {
+  getInputs = () => {
       var elements = document.getElementsByClassName("input");
-
-      var names = '';
       for(var i=0; i<elements.length; i++) {
           this.state.questions[i] = elements[i].childNodes[0].alt;
           this.state.fields[i] = elements[i].childNodes[0].name;
       }
-   }
+  }
 
-   linebreak = s => {
+  linebreak = s => {
      var two_line = /\n\n/g;
      var one_line = /\n/g;
      return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-   }
+  }
 
-   capitalize = s => {
+  capitalize = s => {
      var first_char = /\S/;
      return s.replace(first_char, function(m) { return m.toUpperCase(); });
-   }
+  }
 
   mySubmit = data => {
     console.log(data);
@@ -127,17 +115,20 @@ class FormDemo extends Component{
 
   startToTalk = () =>  {
     const { recognizing } = this.state;
-    if (this.state.recognizing) {
+    if (recognizing) {
       this.state.recognition.stop();
       return;
     }
-    this.state.final_transcript = '';
+
+    this.setState({
+      final_transcript: ''
+    })
+
     this.state.recognition.lang = this.state.langs;
     this.state.recognition.start(); // call to onstart event handler
-    this.state.ignore_onend = false;
   }
 
-  handleChange = (e) => {
+  handleChange = e => {
     this.setState({langs:e.target.value});
   }
 
@@ -150,34 +141,28 @@ class FormDemo extends Component{
            </Helmet>
 
            <Title color="purple" tag="h3" >Voice Form</Title>
-           <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
+           <Form  name="myForm" onSubmit={handleSubmit}>
               <div className="row">
                <TextField
                   id="name"
                   name="name"
                   type="text"
                   label="Name"
-                  errorText="Ingresa tu nombre."
                   question="What is your name?"
-                  className="input"
                 />
                 <TextField
                    id="lastname"
                    name="lastname"
                    type="text"
                    label="Lastname"
-                   errorText="Ingresa tu apellido."
                    question="What is your lastname?"
-                   className="input"
                  />
                  <TextField
                     id="age"
                     name="age"
                     type="text"
                     label="Age"
-                    errorText="Ingresa tu edad."
                     question="How old are you?"
-                    className="input"
                   />
                  <Button id="button-login" color="success" type="submit" disabled={false} spinner={false}>
                     Send

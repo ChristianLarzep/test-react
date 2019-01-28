@@ -6,24 +6,16 @@ import { reducer as formReducer } from 'redux-form'
 import FormDemo from '../formDemo/formDemo';
 import './App.css';
 
-
-
-
-
 const reducers = {
-  // ... your other reducers here ...
-  form: formReducer     // <---- Mounted at 'form'
+  form: formReducer
 }
 const reducer = combineReducers(reducers)
 const store = createStore(reducer)
 
 class App extends Component {
 
-  submit = (values) => {
-    // Do something with the form values
+  submit = values => {
     console.log(values);
-
-
   }
 
   render() {

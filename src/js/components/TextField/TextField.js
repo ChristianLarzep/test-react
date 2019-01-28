@@ -7,16 +7,12 @@ import './style.css';
 function TextField(props) {
   const {
     id,
-    //className,
     disabled,
-    //errorText,
     label,
     name,
     type,
     input,
     question,
-    //value,
-    //...others
   } = props;
 
   const stylenames = classnames({
@@ -46,9 +42,7 @@ function TextField(props) {
 }
 
 TextField.propTypes = {
-  className: PropTypes.string,
   disabled: PropTypes.bool,
-  errorText: PropTypes.node,
   id: PropTypes.string.isRequired,
   /**
   * ReduxForm Prop
@@ -64,8 +58,7 @@ TextField.propTypes = {
 };
 
 TextField.defaultProps = {
-  type: 'text',
-  errorText: 'Valor requerido',
+  type: 'text'
 };
 
 export default TextField;

@@ -13,6 +13,7 @@ ReactDOM.render(
   <Router>
      <Switch>
        <Route path="/" component={App}/>
+       <Route path="/bios-form" component={App}/>
      </Switch>
   </Router>,
   document.getElementById('root'));
