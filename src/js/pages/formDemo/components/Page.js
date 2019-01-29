@@ -10,9 +10,7 @@ class Page extends Component{
           <Header className="page-header" sendAccent={(e) => this.props.onSendAccent(e)} onStart = {this.props.onStart}/>
           <div className="page-body">
              <div className="body-container">
-               <div className="form">
                  {children}
-               </div>
              </div>
           </div>
       </section>

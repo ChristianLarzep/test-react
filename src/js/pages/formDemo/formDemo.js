@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { reduxForm, Form, change, reset } from 'redux-form';
 
 import Page from './components/Page';
-
 import { Helmet, Title, TextField, Button } from '../../components';
+
+import validator from './validator';
 
 import './style.css';
 
-@reduxForm({ form: 'myForm' })
+@reduxForm({ form: 'myForm', validate: validator })
 class FormDemo extends Component{
 
   static propTypes = {
@@ -32,6 +32,7 @@ class FormDemo extends Component{
   componentDidMount() {
     this.getInputs();
     if (!('webkitSpeechRecognition' in window)) {
+      //TODO
       //upgrade();
     } else {
       var speechRecognition = window.webkitSpeechRecognition;
@@ -39,13 +40,13 @@ class FormDemo extends Component{
       const { questions } = this.state;
 
       this.state.recognition = new speechRecognition();
-      this.state.recognition.continuous = false; //The default value for continuous is false, meaning that when the user stops talking, speech recognition will end
+      this.state.recognition.continuous = false;
       this.state.recognition.interimResults = true;
       this.setState({
         numQuest: this.state.questions.length
       })
 
-      this.state.recognition.onstart = () => { //onstart event handler. For each new set of results, it calls the onresult event handler.
+      this.state.recognition.onstart = () => {
         var u = new SpeechSynthesisUtterance();
         u.text = questions[this.state.counterQuest];
         u.lang = 'en-US';
@@ -56,10 +57,10 @@ class FormDemo extends Component{
         });
       };
 
-      this.state.recognition.onerror = event => { //onerror event handler
+      this.state.recognition.onerror = event => {
       };
 
-      this.state.recognition.onend = () => { // onend event handler
+      this.state.recognition.onend = () => {
         const { counterQuest, numQuest} = this.state;
         if(counterQuest < numQuest){
              setTimeout(function(){ this.talking(); }.bind(this), 2000);
@@ -70,7 +71,7 @@ class FormDemo extends Component{
         }
       };
 
-      this.state.recognition.onresult = event => {  // onresult event handler
+      this.state.recognition.onresult = event => {
         var interim_transcript = '';
         var final_trans = '';
         const { fields } = this.state;
@@ -114,7 +115,7 @@ class FormDemo extends Component{
 
   talking = () => {
     this.state.recognition.lang = this.state.langs;
-    this.state.recognition.start(); // call to onstart event handler
+    this.state.recognition.start();
   }
 
   startToTalk = () =>  {
@@ -138,7 +139,8 @@ class FormDemo extends Component{
   }
 
   render(){
-    const { handleSubmit, pristine, reset, submitting, loading, invalid  } = this.props;
+    const { handleSubmit, submitting, loading, invalid  } = this.props;
+
     return(
        <Page id="login-page" className="login-page" onSendAccent= { (e) => this.handleChange(e)} onStart= {this.startToTalk} >
            <Helmet>
@@ -146,7 +148,7 @@ class FormDemo extends Component{
            </Helmet>
 
            <Title color="purple" tag="h3" >Voice Form</Title>
-           <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
+           <form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
               <div className="row">
                <TextField
                   id="name"
@@ -162,13 +164,13 @@ class FormDemo extends Component{
                    label="Lastname"
                    question="What is your lastname?"
                  />
-
-                 <Button id="button-login" color="success" type="submit" disabled={pristine || submitting} spinner={loading}>
+                 
+                 <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
                     Send
                 </Button>
 
                 </div>
-           </Form>
+           </form>
        </Page>
     )
   }

@@ -27,3 +27,7 @@
 .textfield{
   margin-top: 18px;
 }
+
+.error{
+  border-color: red;
+}
