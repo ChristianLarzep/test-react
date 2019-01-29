@@ -143,12 +143,10 @@ class FormDemo extends Component{
 
     return(
        <Page id="login-page" className="login-page" onSendAccent= { (e) => this.handleChange(e)} onStart= {this.startToTalk} >
-           <Helmet>
-               <title>Bienvenido</title>
-           </Helmet>
+           <Helmet><title>Bienvenido</title></Helmet>
 
            <Title color="purple" tag="h3" >Voice Form</Title>
-           <form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
+           <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
               <div className="row">
                <TextField
                   id="name"
@@ -164,13 +162,13 @@ class FormDemo extends Component{
                    label="Lastname"
                    question="What is your lastname?"
                  />
-                 
+
                  <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
                     Send
                 </Button>
 
                 </div>
-           </form>
+           </Form>
        </Page>
     )
   }
