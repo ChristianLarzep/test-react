@@ -57,9 +57,6 @@ class FormDemo extends Component{
         });
       };
 
-      this.state.recognition.onerror = event => {
-      };
-
       this.state.recognition.onend = () => {
         const { counterQuest, numQuest} = this.state;
         if(counterQuest < numQuest){
@@ -72,14 +69,11 @@ class FormDemo extends Component{
       };
 
       this.state.recognition.onresult = event => {
-        var interim_transcript = '';
         var final_trans = '';
         const { fields } = this.state;
         for (var i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
              final_trans += event.results[i][0].transcript;
-          } else {
-            interim_transcript += event.results[i][0].transcript;
           }
         }
 
@@ -97,12 +91,6 @@ class FormDemo extends Component{
       }
   }
 
-  linebreak = s => {
-     var two_line = /\n\n/g;
-     var one_line = /\n/g;
-     return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-  }
-
   capitalize = s => {
      var first_char = /\S/;
      return s.replace(first_char, function(m) { return m.toUpperCase(); });
@@ -118,7 +106,7 @@ class FormDemo extends Component{
     this.state.recognition.start();
   }
 
-  startToTalk = () =>  {
+  onStart = () =>  {
     const { recognizing } = this.state;
     if (recognizing) {
       this.state.recognition.stop();
@@ -142,30 +130,31 @@ class FormDemo extends Component{
     const { handleSubmit, submitting, loading, invalid  } = this.props;
 
     return(
-       <Page id="login-page" className="login-page" onSendAccent= { (e) => this.handleChange(e)} onStart= {this.startToTalk} >
+       <Page id="login-page" className="login-page" onSendAccent= { (e) => this.handleChange(e)} onStart= {this.onStart} >
            <Helmet><title>Bienvenido</title></Helmet>
 
            <Title color="purple" tag="h3" >Voice Form</Title>
            <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
               <div className="row">
-               <TextField
-                  id="name"
-                  name="name"
-                  type="text"
-                  label="Name"
-                  question="What is your name?"
-                />
-                <TextField
-                   id="lastname"
-                   name="lastname"
-                   type="text"
-                   label="Lastname"
-                   question="What is your lastname?"
-                 />
 
-                 <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
-                    Send
-                </Button>
+                 <TextField
+                    id="name"
+                    name="name"
+                    type="text"
+                    label="Name"
+                    question="What is your name?"
+                  />
+                  <TextField
+                     id="lastname"
+                     name="lastname"
+                     type="text"
+                     label="Lastname"
+                     question="What is your lastname?"
+                   />
+
+                   <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
+                      Send
+                  </Button>
 
                 </div>
            </Form>
