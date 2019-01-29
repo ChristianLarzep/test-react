@@ -8,8 +8,9 @@ function Button(props) {
 
   const stylenames = classnames({
     btn: true,
-    [`btn-${color}`]: !!color,
-    className:true
+    [`btn-${color}`]: (!!color && disabled == false),
+    className:true,
+    [`disabled-${color}`]: disabled
   });
 
   return (

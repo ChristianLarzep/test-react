@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { reduxForm, Form, change } from 'redux-form';
+import { reduxForm, Form, change, reset } from 'redux-form';
 
 import Page from './components/Page';
 
@@ -56,13 +56,13 @@ class FormDemo extends Component{
         });
       };
 
-      this.state.recognition.onerror = function(event) { //onerror event handler
+      this.state.recognition.onerror = event => { //onerror event handler
       };
 
       this.state.recognition.onend = () => { // onend event handler
         const { counterQuest, numQuest} = this.state;
         if(counterQuest < numQuest){
-             setTimeout(function(){ this.startToTalk(); }.bind(this), 2000);
+             setTimeout(function(){ this.talking(); }.bind(this), 2000);
               this.setState({
                 final_transcript:'',
                 recognizing: false,
@@ -108,8 +108,14 @@ class FormDemo extends Component{
   }
 
   mySubmit = data => {
+    this.props.dispatch(reset('myForm'));
     console.log(data);
   };
+
+  talking = () => {
+    this.state.recognition.lang = this.state.langs;
+    this.state.recognition.start(); // call to onstart event handler
+  }
 
   startToTalk = () =>  {
     const { recognizing } = this.state;
@@ -119,11 +125,12 @@ class FormDemo extends Component{
     }
 
     this.setState({
-      final_transcript: ''
+      recognizing: true,
+      final_transcript: '',
+      counterQuest: 0
     })
 
-    this.state.recognition.lang = this.state.langs;
-    this.state.recognition.start(); // call to onstart event handler
+    this.talking();
   }
 
   handleChange = e => {
@@ -131,7 +138,7 @@ class FormDemo extends Component{
   }
 
   render(){
-    const { handleSubmit, pristine, reset, submitting, loading  } = this.props;
+    const { handleSubmit, pristine, reset, submitting, loading, invalid  } = this.props;
     return(
        <Page id="login-page" className="login-page" onSendAccent= { (e) => this.handleChange(e)} onStart= {this.startToTalk} >
            <Helmet>
@@ -156,9 +163,10 @@ class FormDemo extends Component{
                    question="What is your lastname?"
                  />
 
-                 <Button id="button-login" color="success" type="submit" disabled={false} spinner={false}>
+                 <Button id="button-login" color="success" type="submit" disabled={pristine || submitting} spinner={loading}>
                     Send
                 </Button>
+
                 </div>
            </Form>
        </Page>

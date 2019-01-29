@@ -11,7 +11,6 @@ function TextField(props) {
     label,
     name,
     type,
-    input,
     question,
   } = props;
 
@@ -25,8 +24,6 @@ function TextField(props) {
       {label && <label className="label-text">{label}</label>}
 
       <div className='input'>
-        {input && <Field  id={id} {...input} component="input" className="" type={type} alt={question} />}
-        {!input && (
           <Field
             id={id}
             className="input-text"
@@ -35,7 +32,6 @@ function TextField(props) {
             component="input"
             alt={question}
           />
-        )}
       </div>
     </div>
   );
@@ -44,17 +40,9 @@ function TextField(props) {
 TextField.propTypes = {
   disabled: PropTypes.bool,
   id: PropTypes.string.isRequired,
-  /**
-  * ReduxForm Prop
-  */
-  input: PropTypes.shape({
-    name: PropTypes.string,
-    onChange: PropTypes.func,
-  }),
   label: PropTypes.node,
   name: PropTypes.string.isRequired,
-  type: PropTypes.string,
-
+  type: PropTypes.string
 };
 
 TextField.defaultProps = {

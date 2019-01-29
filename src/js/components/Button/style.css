@@ -19,3 +19,25 @@
   margin-top: 30px;
   cursor: pointer;
 }
+
+.disabled-success{
+  background-color: #81ce84;
+  border: none;
+  color: white;
+  padding: 16px 24px;
+  font-size: 14px;
+  width: 80%;
+  margin-top: 30px;
+  cursor: not-allowed;
+}
+
+.disabled-start{
+  background-color: #fdb85e;
+  border: none;
+  color: white;
+  padding: 16px 24px;
+  font-size: 14px;
+  width: 80%;
+  margin-top: 30px;
+  cursor: not-allowed;
+}

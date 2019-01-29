@@ -16,7 +16,7 @@ const store = createStore(reducer)
 class App extends Component {
 
   submit = value => {
-   console.log(values);
+   console.log(value);
   }
 
   render() {
