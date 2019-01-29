@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {  reduxForm, Form, change} from 'redux-form';
+import { reduxForm, Form, change } from 'redux-form';
 
 import Page from './components/Page';
 
-import Helmet from '../../components/Helmet/Helmet';
-import Title from '../../components/Title/Title';
-import TextField from '../../components/TextField/TextField';
-import Button from '../../components/Button/Button';
+import { Helmet, Title, TextField, Button } from '../../components';
 
 import './style.css';
 
+@reduxForm({ form: 'myForm' })
 class FormDemo extends Component{
 
   static propTypes = {
@@ -61,7 +59,7 @@ class FormDemo extends Component{
       this.state.recognition.onerror = function(event) { //onerror event handler
       };
 
-      this.state.recognition.onend = function() { // onend event handler
+      this.state.recognition.onend = () => { // onend event handler
         const { counterQuest, numQuest} = this.state;
         if(counterQuest < numQuest){
              setTimeout(function(){ this.startToTalk(); }.bind(this), 2000);
@@ -70,9 +68,9 @@ class FormDemo extends Component{
                 recognizing: false,
             })
         }
-      }.bind(this);
+      };
 
-      this.state.recognition.onresult = function(event) {  // onresult event handler
+      this.state.recognition.onresult = event => {  // onresult event handler
         var interim_transcript = '';
         var final_trans = '';
         const { fields } = this.state;
@@ -86,7 +84,7 @@ class FormDemo extends Component{
 
         this.setState({ final_transcript: this.capitalize(final_trans) })
         this.props.dispatch(change('myForm', fields[this.state.counterQuest - 1] ,this.state.final_transcript ));
-      }.bind(this);
+      };
     }
    }
 
@@ -141,7 +139,7 @@ class FormDemo extends Component{
            </Helmet>
 
            <Title color="purple" tag="h3" >Voice Form</Title>
-           <Form  name="myForm" onSubmit={handleSubmit}>
+           <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
               <div className="row">
                <TextField
                   id="name"
@@ -157,13 +155,7 @@ class FormDemo extends Component{
                    label="Lastname"
                    question="What is your lastname?"
                  />
-                 <TextField
-                    id="age"
-                    name="age"
-                    type="text"
-                    label="Age"
-                    question="How old are you?"
-                  />
+
                  <Button id="button-login" color="success" type="submit" disabled={false} spinner={false}>
                     Send
                 </Button>
@@ -174,6 +166,4 @@ class FormDemo extends Component{
   }
 }
 
-export default FormDemo = reduxForm({
-  form: 'myForm' // a unique identifier for this form
-})(FormDemo)
+export default FormDemo;
