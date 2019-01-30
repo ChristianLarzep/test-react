@@ -9,7 +9,7 @@ import validator from './validator';
 
 import './style.css';
 
-@reduxForm({ form: 'myForm', validate: validator })
+@reduxForm({ form: 'voiceForm', validate: validator })
 class FormDemo extends Component{
 
   static propTypes = {
@@ -18,7 +18,6 @@ class FormDemo extends Component{
     };
 
     state = {
-      create_email:false,
       final_transcript:'',
       recognizing: false,
       recognition:{},
@@ -76,7 +75,7 @@ class FormDemo extends Component{
         }
 
         this.setState({ final_transcript: this.capitalize(final_trans) })
-        this.props.dispatch(change('myForm', fields[this.state.counterQuest - 1] ,this.state.final_transcript ));
+        this.props.dispatch(change('voiceForm', fields[this.state.counterQuest - 1] ,this.state.final_transcript ));
       };
     }
    }
@@ -95,25 +94,25 @@ class FormDemo extends Component{
   }
 
   mySubmit = data => {
-    this.props.dispatch(reset('myForm'));
+    this.props.dispatch(reset('voiceForm'));
     console.log(data);
   };
 
-  onStart = () =>  {
-    const { recognizing } = this.state;
-    if (recognizing) {
-      this.state.recognition.stop();
-      return;
-    }
+   onStart = () =>  {
+      const { recognizing } = this.state;
+      if (recognizing) {
+        this.state.recognition.stop();
+        return;
+      }
 
-    this.setState({
-      recognizing: true,
-      final_transcript: '',
-      counterQuest: 0
-    })
+      this.setState({
+        recognizing: true,
+        final_transcript: '',
+        counterQuest: 0
+      })
 
-    this.state.recognition.lang = this.state.langs;
-    this.state.recognition.start();
+      this.state.recognition.lang = this.state.langs;
+      this.state.recognition.start();
   }
 
   selectAccent = e => {
@@ -131,7 +130,7 @@ class FormDemo extends Component{
 
         <Title color="purple" tag="h3" >Voice Form</Title>
 
-        <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
+        <Form  name="voiceForm" onSubmit={handleSubmit(this.mySubmit)}>
           <div className="row">
 
               <TextField
