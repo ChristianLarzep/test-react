@@ -4,12 +4,11 @@ import classnames from 'classnames';
 import './style.css';
 
 function Button(props) {
-  const { className, children, color, disabled, onClick, spinner, ...others } = props;
+  const { children, color, disabled, onClick, spinner, ...others } = props;
 
   const stylenames = classnames({
     btn: true,
     [`btn-${color}`]: (!!color && disabled == false),
-    className:true,
     [`disabled-${color}`]: disabled
   });
 
@@ -23,7 +22,6 @@ function Button(props) {
 
 Button.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.string,
   color: PropTypes.string,
   disabled: PropTypes.bool,
   spinner: PropTypes.bool,

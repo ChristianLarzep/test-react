@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Form, change, reset } from 'redux-form';
 
-import Page from './components/Page';
-import { Helmet, Title, TextField, Button } from '../../components';
+import Header from './components';
+import { Page, Helmet, Title, TextField, Button } from '../../components';
 
 import validator from './validator';
 
@@ -42,25 +42,23 @@ class FormDemo extends Component{
       this.state.recognition = new speechRecognition();
       this.state.recognition.continuous = false;
       this.state.recognition.interimResults = true;
-      this.setState({
-        numQuest: this.state.questions.length
-      })
+
+      this.setState({ numQuest: questions.length })
 
       this.state.recognition.onstart = () => {
-        var u = new SpeechSynthesisUtterance();
-        u.text = questions[this.state.counterQuest];
-        u.lang = 'en-US';
-        u.rate = 1.2;
-        speechSyn.speak(u);
-        this.setState({
-          counterQuest: this.state.counterQuest + 1,
-        });
+        var utterance = new SpeechSynthesisUtterance();
+        utterance.text = questions[this.state.counterQuest];
+        utterance.lang = 'en-US';
+        utterance.rate = 1.2;
+        speechSyn.speak(utterance);
+
+        this.setState({ counterQuest: this.state.counterQuest + 1 });
       };
 
       this.state.recognition.onend = () => {
         const { counterQuest, numQuest} = this.state;
         if(counterQuest < numQuest){
-             setTimeout(function(){ this.talking(); }.bind(this), 2000);
+             setTimeout(function(){ this.state.recognition.start(); }.bind(this), 2000);
               this.setState({
                 final_transcript:'',
                 recognizing: false,
@@ -101,11 +99,6 @@ class FormDemo extends Component{
     console.log(data);
   };
 
-  talking = () => {
-    this.state.recognition.lang = this.state.langs;
-    this.state.recognition.start();
-  }
-
   onStart = () =>  {
     const { recognizing } = this.state;
     if (recognizing) {
@@ -119,10 +112,11 @@ class FormDemo extends Component{
       counterQuest: 0
     })
 
-    this.talking();
+    this.state.recognition.lang = this.state.langs;
+    this.state.recognition.start();
   }
 
-  handleChange = e => {
+  selectAccent = e => {
     this.setState({langs:e.target.value});
   }
 
@@ -130,35 +124,41 @@ class FormDemo extends Component{
     const { handleSubmit, submitting, loading, invalid  } = this.props;
 
     return(
-       <Page id="login-page" className="login-page" onSendAccent= { (e) => this.handleChange(e)} onStart= {this.onStart} >
-           <Helmet><title>Bienvenido</title></Helmet>
+      <Page background="grey">
 
-           <Title color="purple" tag="h3" >Voice Form</Title>
-           <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
-              <div className="row">
+        <Helmet><title>Bienvenido</title></Helmet>
+        <Header onStart={this.onStart} selectAccent={this.selectAccent} />
 
-                 <TextField
-                    id="name"
-                    name="name"
-                    type="text"
-                    label="Name"
-                    question="What is your name?"
-                  />
-                  <TextField
-                     id="lastname"
-                     name="lastname"
-                     type="text"
-                     label="Lastname"
-                     question="What is your lastname?"
-                   />
+        <Title color="purple" tag="h3" >Voice Form</Title>
 
-                   <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
-                      Send
-                  </Button>
+        <Form  name="myForm" onSubmit={handleSubmit(this.mySubmit)}>
+          <div className="row">
 
-                </div>
-           </Form>
-       </Page>
+              <TextField
+                id="name"
+                name="name"
+                type="text"
+                label="Name"
+                question="What is your name?"
+                errorText="Name is required"
+              />
+
+              <TextField
+                 id="lastname"
+                 name="lastname"
+                 type="text"
+                 label="Lastname"
+                 question="What is your lastname?"
+                 errorText="Lastname is required"
+               />
+
+               <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
+                  Send
+              </Button>
+
+            </div>
+          </Form>
+      </Page>
     )
   }
 }

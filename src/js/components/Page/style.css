@@ -1,0 +1,14 @@
+.page-body{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.grey-background{
+   background-color: #F4F4F4;
+}
+
+.blue-background{
+   background-color: #BDD4E3;
+}
