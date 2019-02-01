@@ -5,6 +5,8 @@ import { reducer as formReducer } from 'redux-form'
 
 import FormDemo from './js/pages/formDemo';
 
+var data = require('./js/configurations/formVoice/formVoiceFields.json');
+
 import './App.css';
 
 const reducers = {
@@ -23,7 +25,7 @@ class App extends Component {
     return (
       <div className="App">
          <Provider store={store}>
-             <FormDemo onSubmit={this.submit}/>
+             <FormDemo onSubmit={this.submit} fields={data} />
         </Provider>
       </div>
     );

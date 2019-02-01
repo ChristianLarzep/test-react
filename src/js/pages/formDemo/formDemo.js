@@ -5,7 +5,8 @@ import { reduxForm, Form, change, reset } from 'redux-form';
 import Header from './components';
 import { Page, Helmet, Title, TextField, Button } from '../../components';
 
-import validator from './validator';
+
+import validator from '../../configurations/validator';
 
 import './style.css';
 
@@ -120,43 +121,39 @@ class FormDemo extends Component{
   }
 
   render(){
-    const { handleSubmit, submitting, loading, invalid  } = this.props;
+    const { handleSubmit, submitting, loading, invalid, fields: { textFields } } = this.props;
 
     return(
       <Page background="grey">
 
-        <Helmet><title>Bienvenido</title></Helmet>
+        <Helmet><title>BIOS</title></Helmet>
         <Header onStart={this.onStart} selectAccent={this.selectAccent} />
 
         <Title color="purple" tag="h3" >Voice Form</Title>
 
-        <Form  name="voiceForm" onSubmit={handleSubmit(this.mySubmit)}>
+        <Form  name="voiceForm" onSubmit={handleSubmit(this.mySubmit)} className="form">
           <div className="row">
 
-              <TextField
-                id="name"
-                name="name"
-                type="text"
-                label="Name"
-                question="What is your name?"
-                errorText="Name is required"
-              />
-
-              <TextField
-                 id="lastname"
-                 name="lastname"
-                 type="text"
-                 label="Lastname"
-                 question="What is your lastname?"
-                 errorText="Lastname is required"
-               />
-
-               <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
-                  Send
-              </Button>
+               {textFields.map(textfield => (
+                 <TextField
+                    key={textfield.id}
+                    id={textfield.id}
+                    name={textfield.name}
+                    type={textfield.type}
+                    label={textfield.label}
+                    question={textfield.question}
+                    errorText={textfield.errorText}
+                    className={textfield.className}
+                  />
+               ))}
 
             </div>
-          </Form>
+            <div className="button-space">
+              <Button id="button-login" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
+                 Send
+             </Button>
+           </div>
+        </Form>
       </Page>
     )
   }

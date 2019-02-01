@@ -25,7 +25,6 @@ Button.propTypes = {
   color: PropTypes.string,
   disabled: PropTypes.bool,
   spinner: PropTypes.bool,
-  type: PropTypes.string,
   onClick: PropTypes.func,
 };
 

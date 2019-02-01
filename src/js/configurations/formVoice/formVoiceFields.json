@@ -1,0 +1,31 @@
+{
+  "textFields":[
+    {
+      "id":"name",
+      "name":"name",
+      "type":"text",
+      "label":"Name",
+      "question":"What is your name?",
+      "errorText":"Name is required",
+      "className": "col-2"
+    },
+    {
+      "id":"lastname",
+      "name":"lastname",
+      "type":"text",
+      "label":"Lastname",
+      "question":"What is your lastname?",
+      "errorText":"Lastname is required",
+      "className": "col-2"
+    },
+    {
+      "id":"age",
+      "name":"age",
+      "type":"text",
+      "label":"Age",
+      "question":"How old are you?",
+      "errorText":"Name is required",
+      "className": "col-2"
+    }
+  ]
+}

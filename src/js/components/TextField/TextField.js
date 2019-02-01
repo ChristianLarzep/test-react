@@ -15,16 +15,17 @@ class TextField extends Component {
         question,
         errorText,
         input,
-        meta
+        meta,
+        className
       } = this.props;
 
       const hasError = field.meta.touched && field.meta.invalid;
-      const styles = classnames({ disabled, 'textfield':true });
       const inputStyle = classnames({ 'input-text': (hasError == false) , 'error': hasError })
+      const styles = "textfield "+className;
 
       return(
           <div className={styles}>
-            {label && <label className="label-text">{label}</label>}
+            {label && <div className="label"><label className="label-text">{label}</label></div>}
 
             <div className='input'>
                 <input
