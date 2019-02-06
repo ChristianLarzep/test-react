@@ -7,11 +7,13 @@ function CustomHelmet(props) {
     children,
   } = props;
 
-  return (<Helmet
-    titleTemplate={`%s - Frontend`}
-  >
-    {children}
-  </Helmet>);
+  return (
+    <Helmet
+      titleTemplate="%s - Frontend"
+    >
+      {children}
+    </Helmet>
+  );
 }
 
 CustomHelmet.propTypes = {
