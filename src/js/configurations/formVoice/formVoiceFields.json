@@ -19,13 +19,13 @@
       "className": "col-2"
     },
     {
-      "id":"age",
-      "name":"age",
+      "id":"profile",
+      "name":"profile",
       "type":"text",
-      "label":"Age",
-      "question":"How old are you?",
-      "errorText":"Name is required",
-      "className": "col-2"
+      "label":"Profile",
+      "question":"Describe your self",
+      "errorText":"Profile is required",
+      "className": "col-1"
     }
   ]
 }

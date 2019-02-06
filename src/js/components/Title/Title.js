@@ -7,9 +7,9 @@ function Title(props) {
   const { className, children, tag, color, icon, border, ...others } = props;
 
   const stylenames = classnames({
-         'title-text':true,
-          'blue': color ==='blue',
-          'purple': color === 'purple'
+    'title-text': true,
+    blue: color === 'blue',
+    purple: color === 'purple',
   });
 
   const Element = tag;

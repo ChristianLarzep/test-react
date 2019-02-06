@@ -2,63 +2,76 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Field } from 'redux-form';
+import { autobind } from 'core-decorators';
 import './style.css';
 
 class TextField extends Component {
-    renderField(field){
-      const {
-        id,
-        disabled,
-        label,
-        name,
-        type,
-        question,
-        errorText,
-        input,
-        meta,
-        className
-      } = this.props;
+  @autobind
+  renderField(field) {
+    const {
+      id,
+      label,
+      name,
+      type,
+      question,
+      errorText,
+      className,
+      multiLine,
+    } = this.props;
 
-      const hasError = field.meta.touched && field.meta.invalid;
-      const inputStyle = classnames({ 'input-text': (hasError == false) , 'error': hasError })
-      const styles = "textfield "+className;
+    const hasError = field.meta.touched && field.meta.invalid;
+    const inputStyle = classnames({ 'input-text': (hasError === false), error: hasError });
+    const styles = `textfield ${className}`;
+    let inputElement;
 
-      return(
-          <div className={styles}>
-            {label && <div className="label"><label className="label-text">{label}</label></div>}
-
-            <div className='input'>
-                <input
-                  id={id}
-                  className={inputStyle}
-                  name={name}
-                  type={type}
-                  alt={question}
-                  {...field.input}
-                />
-            </div>
-            {hasError && <span className="input-error-text">{errorText}</span>}
-          </div>
-       )
+    if (multiLine) {
+      inputElement = (<textarea {...field.input} name={name} className={inputStyle} />);
+    } else {
+      inputElement = (
+        <input
+          id={id}
+          className={inputStyle}
+          name={name}
+          type={type}
+          {...field.input}
+        />
+      );
     }
 
-    render(){
-      return <Field {...this.props} component={this.renderField.bind(this)} />
-    }
+    return (
+      <div className={styles}>
+        {label && <div className="label"><span className="label-text">{label}</span></div>}
+
+        <div className="input">
+          {inputElement}
+          <div className="divCheckbox" style={{ display: 'none' }}>{question}</div>
+        </div>
+
+        {hasError && <span className="input-error-text">{errorText}</span>}
+      </div>
+    );
+  }
+
+  render() {
+    return <Field {...this.props} component={this.renderField} />;
+  }
 }
 
 TextField.propTypes = {
   disabled: PropTypes.bool,
+  errorText: PropTypes.node,
   id: PropTypes.string.isRequired,
   label: PropTypes.node,
+  multiLine: PropTypes.bool,
   name: PropTypes.string.isRequired,
+  question: PropTypes.string,
   type: PropTypes.string,
-  errorText: PropTypes.node,
-  question: PropTypes.string
 };
 
 TextField.defaultProps = {
-  type: 'text'
+  type: 'text',
+  multiLine: false,
+  errorText: 'Valor requerido',
 };
 
 export default TextField;
