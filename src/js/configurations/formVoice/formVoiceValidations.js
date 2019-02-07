@@ -2,10 +2,10 @@ module.exports = {
   name: {
     presence: true,
   },
-  lastname: {
+  role: {
     presence: true,
   },
-  age: {
+  profile: {
     presence: true,
   },
 };

@@ -13,20 +13,21 @@ class TextField extends Component {
       label,
       name,
       type,
-      question,
       errorText,
       className,
       multiLine,
     } = this.props;
 
     const hasError = field.meta.touched && field.meta.invalid;
-    const inputStyle = classnames({ 'input-text': (hasError === false), error: hasError });
-    const styles = `textfield ${className}`;
-    let inputElement;
+    const fieldType = multiLine ? 'textarea' : 'textfield';
+    const textfield = `${fieldType} ${className}`;
+    let inputStyle; let textAreaStyle; let inputElement;
 
     if (multiLine) {
-      inputElement = (<textarea {...field.input} name={name} className={inputStyle} />);
+      textAreaStyle = classnames({ multiLine: (hasError === false), errorTextarea: hasError });
+      inputElement = (<textarea {...field.input} name={name} className={textAreaStyle} />);
     } else {
+      inputStyle = classnames({ 'input-text': (hasError === false), errorInput: hasError });
       inputElement = (
         <input
           id={id}
@@ -39,13 +40,9 @@ class TextField extends Component {
     }
 
     return (
-      <div className={styles}>
+      <div className={textfield}>
         {label && <div className="label"><span className="label-text">{label}</span></div>}
-
-        <div className="input">
-          {inputElement}
-          <div className="divCheckbox" style={{ display: 'none' }}>{question}</div>
-        </div>
+        {inputElement}
 
         {hasError && <span className="input-error-text">{errorText}</span>}
       </div>

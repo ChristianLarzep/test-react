@@ -6,25 +6,26 @@
       "type":"text",
       "label":"Name",
       "question":"What is your name?",
-      "errorText":"Name is required",
+      "errorText":"Name required",
+      "className": "col-2",
+      "confirmQuestion": "Do you want to add another name?"
+    },
+    {
+      "id":"role",
+      "name":"role",
+      "type":"text",
+      "label":"Role",
+      "question":"What is your role?",
+      "errorText":"Role required",
       "className": "col-2"
     },
     {
-      "id":"lastname",
-      "name":"lastname",
+      "id":"age",
+      "name":"age",
       "type":"text",
-      "label":"Lastname",
-      "question":"What is your lastname?",
-      "errorText":"Lastname is required",
-      "className": "col-2"
-    },
-    {
-      "id":"profile",
-      "name":"profile",
-      "type":"text",
-      "label":"Profile",
-      "question":"Describe your self",
-      "errorText":"Profile is required",
+      "label":"Age",
+      "question":"How old are you?",
+      "errorText":"Age required",
       "className": "col-1"
     }
   ]

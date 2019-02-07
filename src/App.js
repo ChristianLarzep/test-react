@@ -24,7 +24,7 @@ class App extends Component {
     return (
       <div className="App">
         <Provider store={store}>
-          <FormDemo onSubmit={this.submit} fields={data} />
+          <FormDemo onSubmit={this.submit} fields={data} title="Voice Form" />
         </Provider>
       </div>
     );

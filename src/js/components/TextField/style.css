@@ -1,10 +1,15 @@
 .textfield{
-  margin-top: 22px;
+  margin-bottom: 22px;
+  height: 75px;
+}
+
+.textarea{
+  margin-bottom: 65px;
   height: 75px;
 }
 
 .col-1{
-  width: 100%;
+  width: 94.5%;
   float: left;
   margin-right: 40px;
 }
@@ -12,18 +17,13 @@
 .col-2{
   width: 45%;
   float: left;
-  margin-right: 30px;
+  margin-right: 3%;
 }
 
 .col-3{
   width: 29%;
   float: left;
-  margin-right: 31px;
-}
-
-.col-1-center{
-  width: 100%;
-  margin:auto;
+  margin-right: 2.8%;
 }
 
 .col-2-center{
@@ -47,7 +47,7 @@
 }
 
 .input-text{
-  margin-top:5px;;
+  margin-top:5px;
   width: 97%;
   height: 40px;
   border:solid #A5A2A6;
@@ -57,9 +57,24 @@
   transition: border .5s ease-in-out;
 }
 
+.multiLine{
+  margin-top:5px;
+  width: 97%;
+  height: 80px;
+  border:solid #A5A2A6;
+  border-width: 0.5px;
+  padding-left: 35px;
+  font-size: 16px;
+  transition: border .5s ease-in-out;
+  resize: none;
+}
+
 .input-text:focus{
   border: .5px solid black;
+}
 
+.multiLine:focus{
+  border: .5px solid black;
 }
 
 .disabled{
@@ -67,7 +82,7 @@
     pointer-events: none;
 }
 
-.error{
+.errorInput{
   margin-top:5px;;
   height: 40px;
   width: 97%;
@@ -75,6 +90,17 @@
   border-width: 0.5px;
   padding-left: 35px;
   font-size: 16px;
+}
+
+.errorTextarea{
+  margin-top:5px;;
+  height: 80px;
+  width: 97%;
+  border:solid red;
+  border-width: 0.5px;
+  padding-left: 35px;
+  font-size: 16px;
+  resize: none;
 }
 
 .input-error-text {
