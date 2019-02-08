@@ -1,6 +1,7 @@
 
 .form{
-  padding-left: 10%;
+  padding-left: 3%;
+  padding-right: 3%;
 }
 
 .title{
@@ -9,9 +10,12 @@
 
 .row{
   width: 90%;
+  padding: 5%;
+  border: 1px solid black;
 }
 
 .button-space{
-  margin-left:39%;
+  margin:auto;
+  margin-top: 70px;
   width: 200px;
 }

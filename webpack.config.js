@@ -22,6 +22,10 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /.*\.(png|jpe?g|svg)$/i,
+        loader: 'file-loader?name=/src/assets/[name].[ext]',
+      },
     ],
   },
   devServer: {

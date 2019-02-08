@@ -18,7 +18,9 @@
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
     "validate.js": "^0.11.1",
-    "core-decorators": "^0.15.0"
+    "core-decorators": "^0.15.0",
+    "file-loader": "^3.0.1",
+    "image-webpack-loader": "^3.2.0"
   },
   "scripts": {
     "test": "react-scripts test",

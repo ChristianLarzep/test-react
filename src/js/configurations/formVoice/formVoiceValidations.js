@@ -8,4 +8,7 @@ module.exports = {
   profile: {
     presence: true,
   },
+  techskill: {
+    presence: true,
+  },
 };

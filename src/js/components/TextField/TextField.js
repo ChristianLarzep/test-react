@@ -22,6 +22,7 @@ class TextField extends Component {
     const fieldType = multiLine ? 'textarea' : 'textfield';
     const textfield = `${fieldType} ${className}`;
     let inputStyle; let textAreaStyle; let inputElement;
+    const spanError = hasError ? 'display-error-text' : 'error-hidden';
 
     if (multiLine) {
       textAreaStyle = classnames({ multiLine: (hasError === false), errorTextarea: hasError });
@@ -44,7 +45,7 @@ class TextField extends Component {
         {label && <div className="label"><span className="label-text">{label}</span></div>}
         {inputElement}
 
-        {hasError && <span className="input-error-text">{errorText}</span>}
+        <span className={spanError}>{errorText}</span>
       </div>
     );
   }

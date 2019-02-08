@@ -4,11 +4,10 @@
       "id":"name",
       "name":"name",
       "type":"text",
-      "label":"Name",
+      "label":"Full name",
       "question":"What is your name?",
       "errorText":"Name required",
-      "className": "col-2",
-      "confirmQuestion": "Do you want to add another name?"
+      "className": "col-3"
     },
     {
       "id":"role",
@@ -17,16 +16,27 @@
       "label":"Role",
       "question":"What is your role?",
       "errorText":"Role required",
-      "className": "col-2"
+      "className": "col-3"
     },
     {
-      "id":"age",
-      "name":"age",
+      "id":"profile",
+      "name":"profile",
       "type":"text",
-      "label":"Age",
-      "question":"How old are you?",
-      "errorText":"Age required",
-      "className": "col-1"
+      "label":"Profile",
+      "question":"Describe your self",
+      "errorText":"Profile required",
+      "className": "col-1-textarea",
+      "multiLine": true
+    },
+    {
+      "id":"techskill",
+      "name":"techskill",
+      "type":"text",
+      "label":"Technical skills",
+      "question":"What technical skill do you have?",
+      "errorText":"Skill required",
+      "className": "col-2-list",
+      "confirmQuestion": "Do you want to add another technical skill?"
     }
   ]
 }

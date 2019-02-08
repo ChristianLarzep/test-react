@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
+import logo from './assets/intersys_Logo.png';
 import FormDemo from './js/pages/formDemo';
 
 import './App.css';
@@ -24,7 +25,7 @@ class App extends Component {
     return (
       <div className="App">
         <Provider store={store}>
-          <FormDemo onSubmit={this.submit} fields={data} title="Voice Form" />
+          <FormDemo onSubmit={this.submit} fields={data} title="Bio capture" logo={logo} />
         </Provider>
       </div>
     );

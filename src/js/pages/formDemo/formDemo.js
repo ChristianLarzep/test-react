@@ -17,6 +17,7 @@ class FormDemo extends Component {
     fields: PropTypes.shape({}),
     handleSubmit: PropTypes.func,
     loading: PropTypes.bool,
+    logo: PropTypes.string,
     submitting: PropTypes.bool,
     title: PropTypes.string,
   };
@@ -24,15 +25,15 @@ class FormDemo extends Component {
     state = {
       recognizing: false,
       recognition: {},
-      numQuest: 0,
       counterQuest: 0,
       questions: [],
       fields: [],
       langs: 'Australia',
       fieldsData: this.props.fields,
-      confirmQuestion: [undefined],
+      confirmQuestions: [],
       confirming: false,
       confirmResponse: '',
+      countAppend: 1,
     }
 
     componentDidMount() {
@@ -43,25 +44,24 @@ class FormDemo extends Component {
       } else {
         const SpeechRecognition = window.webkitSpeechRecognition;
         const speechSyn = window.speechSynthesis;
-        const { questions, confirmQuestion } = this.state;
+        const { confirmQuestions } = this.state;
 
         this.state.recognition = new SpeechRecognition();
+        const utterance = new SpeechSynthesisUtterance();
 
         const { recognition } = this.state;
 
         recognition.continuous = false;
         recognition.interimResults = true;
 
-        this.setState({ numQuest: questions.length });
-
         recognition.onstart = () => {
-          const { confirming } = this.state;
-          const utterance = new SpeechSynthesisUtterance();
+          const { confirming, questions } = this.state;
           utterance.lang = 'en-US';
           utterance.rate = 1.2;
 
           if (confirming) {
-            utterance.text = confirmQuestion[this.getCounterQuest()];
+            utterance.text = confirmQuestions[this.getCounterQuest() - 1];
+            confirmQuestions[this.getCounterQuest() - 1] = undefined;
           } else {
             utterance.text = questions[this.getCounterQuest()];
 
@@ -75,26 +75,12 @@ class FormDemo extends Component {
           speechSyn.speak(utterance);
         };
 
-        recognition.onend = () => {
-          const { counterQuest, numQuest, confirmResponse } = this.state;
-          this.repeatQuestion(confirmResponse);
-          const confirm = this.willConfirm();
-          if (counterQuest < numQuest || confirm) {
-            setTimeout(() => { recognition.start(); }, 2000);
-            this.setState({ recognizing: false, confirming: confirm });
-          }
-        };
-
         recognition.onresult = event => {
           let transcription = '';
           const { fields, confirming } = this.state;
           const { dispatch } = this.props;
           for (let i = event.resultIndex; i < event.results.length; i += 1) {
-            if (event.results[i].isFinal) {
-              transcription += event.results[i][0].transcript;
-            } else {
-              transcription += event.results[i][0].transcript;
-            }
+            transcription += event.results[i][0].transcript;
           }
 
           if (confirming) {
@@ -103,30 +89,58 @@ class FormDemo extends Component {
             dispatch(change('voiceForm', fields[this.getCounterQuest() - 1], this.capitalize(transcription)));
           }
         };
+
+        recognition.onend = () => {
+          this.addAnother();
+          const { counterQuest, questions } = this.state;
+          if (this.isThereConfirmQuest() || counterQuest < questions.length) {
+            setTimeout(() => { recognition.start(); }, 2000);
+            this.setState({ recognizing: false });
+          }
+        };
       }
     }
 
-  repeatQuestion = response => {
+  addAnother = () => {
     const words = ['yes', 'jazz', 'just'];
-    const { confirming, confirmQuestion } = this.state;
-    if (words.includes(response) && confirming) {
-      this.setState(prevState => {
-        return {
-          counterQuest: prevState.counterQuest - 1,
-        };
-      });
-    } else if (words.includes(response) === false && confirming) {
-      confirmQuestion[this.getCounterQuest()] = undefined;
+    const { confirming, confirmResponse } = this.state;
+    if (words.includes(confirmResponse) && confirming) {
+      this.appendField();
     }
   }
 
-  willConfirm = () => {
-    const { confirmQuestion } = this.state;
-    if (typeof confirmQuestion[this.getCounterQuest()] === 'undefined') {
+  isThereConfirmQuest = () => {
+    const { confirmQuestions } = this.state;
+    if (typeof confirmQuestions[this.getCounterQuest() - 1] === 'undefined') {
+      this.setState({ confirming: false });
       return false;
     }
 
+    this.setState({ confirming: true });
     return true;
+  }
+
+  appendField = () => {
+    const { fieldsData: { textFields }, counterQuest, fields, questions, confirmQuestions, countAppend } = this.state;
+    const { id, name, type, question, errorText, className, confirmQuestion } = textFields[counterQuest - 1];
+    const newTextfield = {
+      id: id.concat(countAppend),
+      name: name.concat(countAppend),
+      type,
+      question,
+      errorText,
+      className,
+      confirmQuestion,
+    };
+    textFields.splice(counterQuest, 0, newTextfield);
+    fields.splice(counterQuest, 0, newTextfield.name);
+    questions.splice(counterQuest, 0, question);
+    confirmQuestions.splice(counterQuest, 0, confirmQuestion);
+    this.setState(prevState => {
+      return {
+        countAppend: prevState.countAppend + 1,
+      };
+    });
   }
 
   getCounterQuest = () => {
@@ -135,20 +149,13 @@ class FormDemo extends Component {
   }
 
   getInputs = () => {
-    const { questions, fields, confirmQuestion, fieldsData: { textFields } } = this.state;
+    const { questions, fields, confirmQuestions, fieldsData: { textFields } } = this.state;
 
     for (let i = 0; i < textFields.length; i += 1) {
       fields[i] = textFields[i].name;
       questions[i] = textFields[i].question;
-      confirmQuestion[i + 1] = textFields[i].confirmQuestion;
+      confirmQuestions[i] = textFields[i].confirmQuestion;
     }
-
-    this.setState(prevState => {
-      return {
-        questions: [...prevState.questions, questions],
-        fields: [...prevState.fields, fields],
-      };
-    });
   }
 
   capitalize = s => {
@@ -183,14 +190,14 @@ class FormDemo extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting, loading, invalid, title } = this.props;
+    const { handleSubmit, submitting, loading, invalid, title, logo } = this.props;
     const { fieldsData: { textFields } } = this.state;
 
     return (
-      <Page background="grey">
+      <Page background="white">
 
         <Helmet><title>BIOS</title></Helmet>
-        <Header onStart={this.onStart} selectAccent={this.selectAccent} />
+        <Header onStart={this.onStart} selectAccent={this.selectAccent} logo={logo} />
 
         <Title color="purple" tag="h3" className="title">{title}</Title>
 
@@ -210,11 +217,11 @@ class FormDemo extends Component {
               />
             ))}
 
-          </div>
-          <div className="button-space">
-            <Button id="btn-submit" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
-                 Send
-            </Button>
+            <div className="button-space">
+              <Button id="btn-submit" color="success" type="submit" disabled={invalid || submitting} spinner={loading}>
+                   Send
+              </Button>
+            </div>
           </div>
         </Form>
       </Page>

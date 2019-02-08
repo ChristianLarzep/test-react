@@ -11,7 +11,9 @@ function Page(props) {
   });
   return (
     <div className={styles}>
-      {children}
+      <div className="content">
+        {children}
+      </div>
     </div>
   );
 }
